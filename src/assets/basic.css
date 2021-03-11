@@ -1,0 +1,14 @@
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+.el-table thead th {
+  background: #f5f7fa;
+  padding: 0 !important;
+}
+
+.el-message__content {
+  line-height: 2 !important;
+}
