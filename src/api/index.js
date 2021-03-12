@@ -1,9 +1,9 @@
 /* eslint-disable */
 import axios from 'axios';
 
-// const baseURL = process.env.NODE_ENV === 'development' ? '/api' : API_SERVER.default;
+const baseURL = process.env.NODE_ENV === 'development' ? '' : 'https://parkutil.smartmideazy.com';
 const http = axios.create({
-  baseURL: '',
+  baseURL,
   timeout: 30000,
 });
 
