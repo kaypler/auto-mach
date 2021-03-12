@@ -226,9 +226,9 @@ const compareBuildName = (main = '', source = '') => {
   if (Number.isInteger(parseInt(source))) {
     source += '栋'
   }
-  // if (main !== source) {
-  //   console.log(main, source);
-  // }
+  if (main !== source) {
+    console.log(main, source);
+  }
   return main === source;
 }
 
@@ -239,14 +239,18 @@ const compareUnit = (main = '', source = '') => {
 
   if (source === '/') {
     source = '1单元';
-  } else if (Number.isInteger(parseInt(source))) {
+  } else if (Number.isInteger(+source)) {
     source += '单元';
   }
   
-  // if (main !== source) {
-  //   console.log(main, source);
-  // }
+  if (main !== source) {
+    console.log(main, source);
+  }
   return main === source;
+}
+
+const compareRoomNo = (main = '', source = '') => {
+  return parseInt(main) === parseInt(source) || main === source;
 }
 
 export default {
@@ -455,7 +459,7 @@ export default {
       const houses = record.hasMatch ? record.mainHouses.filter(h => h.selected) : 
         record.mainHouses.filter(h => (!h.selectedByOther && !this.usedHouseIds.includes[h.houseId]));
       const sourceHouse = searchFromArray(houses, (h) => compareBuildName(h.buildName, source.buildName) &&
-        compareUnit(h.unit, source.unit) && parseInt(h.roomNo) === parseInt(source.roomNo));
+        compareUnit(h.unit, source.unit) && compareRoomNo(h.roomNo, source.roomNo));
       
       res.sourceHouse = `${source.buildName}_${source.unit}_${source.roomNo}`;
       if (!sourceHouse)  {
