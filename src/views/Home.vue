@@ -657,6 +657,7 @@ export default {
     this.init();
   },
   mounted() {
+    console.log('mounted')
   },
 };
 </script>
