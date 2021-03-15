@@ -222,19 +222,25 @@ const generateKey = (name = '') => {
   return `${name.trim()}`;
 }
 
+const compareStr = (main = '', source = '') => {
+  return String(main).trim() === String(source).trim();
+}
+
 const compareBuildName = (main = '', source = '') => {
-  if (Number.isInteger(parseInt(source))) {
+  if (Number.isInteger(+source)) {
     source += '栋'
   }
-  if (main !== source) {
+  if (main.indexOf(source) == -1) {
     console.log(main, source);
   }
-  return main === source;
+  return main.indexOf(source) !== -1;
 }
 
 const compareUnit = (main = '', source = '') => {
   if (main === '/') {
     main = '1单元';
+  } else if (Number.isInteger(+main)) {
+    main += '单元';
   }
 
   if (source === '/') {
@@ -421,7 +427,7 @@ export default {
       }
     },
     matchPhone(record, sources, res, resolve) {
-      const phoneSources = sources.filter(s => s.phone == record.phone);
+      const phoneSources = sources.filter(s => compareStr(record.phone, s.phone));
       if (!phoneSources.length) {
         res.msg = '联系方式不匹配';
         resolve(res);
@@ -474,7 +480,7 @@ export default {
       res.houseId = sourceHouse.houseId;
 
       /// 悦公馆车牌为数字
-      let sourcePlaceCodes = (source.placeCodes+'').split('|');
+      let sourcePlaceCodes = (source.placeCodes ? source.placeCodes+'': '').split('|').filter(s => s !== '');
       const isNum = sourcePlaceCodes.length && Number.isInteger(parseInt(sourcePlaceCodes[0]));
       if (isNum) {
         sourcePlaceCodes = sourcePlaceCodes.map(s => parseInt(s));
@@ -650,11 +656,11 @@ export default {
       }));
 
       const projectName = getNameFromArray(this.projectList, this.search.projectId, 'communityId', 'name');
-      // const placeName = getNameFromArray(this.placeList, this.search.placeId, 'placeId', 'placeName');
+      const placeName = getNameFromArray(this.placeList, this.search.placeId, 'placeId', 'placeName');
       const sheet = xlsx.utils.json_to_sheet(errorsData);
       const book = xlsx.utils.book_new();
       xlsx.utils.book_append_sheet(book, sheet, 'sheet1');
-      xlsx.writeFile(book, `${projectName}主数据匹配结果表${toTimeStr(Date.now(), 'yyyyMMdd-hhmmss')}.xls`);
+      xlsx.writeFile(book, `${projectName}${placeName}主数据匹配结果表${toTimeStr(Date.now(), 'yyyyMMdd-hhmmss')}.xls`);
     },
   },
   created() {

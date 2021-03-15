@@ -4,7 +4,7 @@ import axios from 'axios';
 const baseURL = process.env.NODE_ENV === 'development' ? '' : 'https://parkutil.smartmideazy.com';
 const http = axios.create({
   baseURL,
-  timeout: 30000,
+  timeout: 120000,
 });
 
 // 请求拦截器
