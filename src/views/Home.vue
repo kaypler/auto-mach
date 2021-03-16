@@ -67,6 +67,10 @@
             </el-option>
           </el-select>
         </div>
+
+        <div class="query-item">
+          <el-checkbox v-model="checkedCount">校验数量</el-checkbox>       
+        </div>
       </div>
 
       <div class="table-btns">
@@ -265,6 +269,7 @@ export default {
     return {
       fetching: false,
       saving: false,
+      checkedCount: false,
       search: {
         projectId: '',
         placeId: '',
@@ -369,6 +374,35 @@ export default {
         this.$message.error(err.message || '系统开小差了');
       });
     },
+    findUnmarked(resultData) {
+      Object.keys(this.sourceMap).forEach(key => {
+        this.sourceMap[key].forEach(item => {
+          if (!item.marked) {
+            resultData.push({
+              name: item.name,
+              phone: item.phone+'',
+              cardId: '',
+              typeName: item.typeName,
+              mainCarnos: '',
+              mainHouses: [],
+              mainPlaces: [],
+              sourceCarnos: item.carnos,
+              sourceHouse: item.placeCodes,
+              sourcePlace: `${item.buildName}_${item.unit}_${item.roomNo}`,
+              houseId: '',
+              parkingIds: [],
+              hasMatch: false,
+              matchStatus: 0,
+              matchData: null,
+              msg: '标准月卡列表没有此数据',
+              updateDate: null,
+            });
+          }
+        });
+      });
+
+      return resultData;
+    },
     resetMatch() {
       this.fetching = true;
       this.fetchMainData().then((mainData) => {
@@ -412,9 +446,9 @@ export default {
         return record;
       });
 
-      this.resultData = resultData;
-      this.filterData = resultData;
-      this.$refs.table.clearFilter();
+      this.resultData = this.checkedCount ? this.findUnmarked(resultData) : resultData;
+      this.filterData = this.resultData;
+      // this.$refs.table.clearFilter();
       this.fetchTable(true);
     },
     matchItem(record, sources, resolve) {
@@ -446,8 +480,11 @@ export default {
     },
     matchCarno(record, sources, res, resolve) {
       // 车牌匹配即有唯一值
-      let source = searchFromArray(sources, (s) => s.carnos.length === record.mainCarnos.length &&
-        includeSubArray(s.carnos.split('|'), record.mainCarnos.split('|')));
+      let source = searchFromArray(sources, (s) => {
+        let sourceCarnos = (s.carnos || '').trim();
+        return sourceCarnos.length === record.mainCarnos.length &&
+          includeSubArray(sourceCarnos.split('|'), record.mainCarnos.split('|'))
+      });
       if (!source) {
         res.msg = '车牌不匹配';
         if (sources.length === 1) {
@@ -455,6 +492,9 @@ export default {
         }
         resolve(res);
       } else {
+        // 标记已匹配的记录
+        source.marked = true;
+
         // 车牌匹配继续下一步房屋
         res.sourceCarnos = source.carnos;
         this.matchHouse(record, source, res, resolve);
@@ -480,7 +520,7 @@ export default {
       res.houseId = sourceHouse.houseId;
 
       /// 悦公馆车牌为数字
-      let sourcePlaceCodes = (source.placeCodes ? source.placeCodes+'': '').split('|').filter(s => s !== '');
+      let sourcePlaceCodes = (source.placeCodes ? (source.placeCodes+'').trim(): '').split('|').filter(s => s !== '');
       const isNum = sourcePlaceCodes.length && Number.isInteger(parseInt(sourcePlaceCodes[0]));
       if (isNum) {
         sourcePlaceCodes = sourcePlaceCodes.map(s => parseInt(s));
