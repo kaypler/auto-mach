@@ -448,6 +448,7 @@ export default {
 
       this.resultData = this.checkedCount ? this.findUnmarked(resultData) : resultData;
       this.filterData = this.resultData;
+      console.log('usedParkingIds', this.usedParkingIds);
       // this.$refs.table.clearFilter();
       this.fetchTable(true);
     },
@@ -520,7 +521,13 @@ export default {
       res.houseId = sourceHouse.houseId;
 
       /// 悦公馆车牌为数字
-      let sourcePlaceCodes = (source.placeCodes ? (source.placeCodes+'').trim(): '').split('|').filter(s => s !== '');
+      let sourcePlaceCodes = (source.placeCodes ? (source.placeCodes+'').trim() : '').split('|').filter(s => s !== '');
+      if (!sourcePlaceCodes.length && record.typeName !== '临时月卡') {
+        res.msg = '台账车位为空';
+        resolve(res);
+        return;
+      }
+
       const isNum = sourcePlaceCodes.length && Number.isInteger(parseInt(sourcePlaceCodes[0]));
       if (isNum) {
         sourcePlaceCodes = sourcePlaceCodes.map(s => parseInt(s));
