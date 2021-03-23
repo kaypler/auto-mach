@@ -241,15 +241,14 @@ const compareBuildName = (main = '', source = '') => {
 }
 
 const compareUnit = (main = '', source = '') => {
-  if (main === '/') {
-    main = '1单元';
-  } else if (Number.isInteger(+main)) {
-    main += '单元';
+  if (main === '/' || source === '/') {
+    return true;
   }
 
-  if (source === '/') {
-    source = '1单元';
-  } else if (Number.isInteger(+source)) {
+  if (Number.isInteger(+main)) {
+    main += '单元';
+  }
+  if (Number.isInteger(+source)) {
     source += '单元';
   }
   
