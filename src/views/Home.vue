@@ -507,7 +507,7 @@ export default {
       const sourceHouse = searchFromArray(houses, (h) => compareBuildName(h.buildName, source.buildName) &&
         compareUnit(h.unit, source.unit) && compareRoomNo(h.roomNo, source.roomNo));
       
-      res.sourceHouse = `${source.buildName}_${source.unit}_${source.roomNo}`;
+      res.sourceHouse = `${source.buildName}_${source.unit || '/'}_${source.roomNo}`;
       if (!sourceHouse)  {
         res.msg = '房屋不匹配';
         resolve(res);
