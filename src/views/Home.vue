@@ -240,7 +240,7 @@ const compareBuildName = (main = '', source = '') => {
   return main.indexOf(source) !== -1;
 }
 
-const compareUnit = (main = '', source = '') => {
+const compareUnit = (main = '/', source = '/') => {
   if (main === '/' || source === '/') {
     return true;
   }
