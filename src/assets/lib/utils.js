@@ -90,14 +90,25 @@ export const debounce = (callback, timeout, immediate) => {
   }
 }
 
+// // 字段对应表
+// export const columns = {
+//   '车主姓名（只能1个）': 'name',
+//   '联系电话（1个）': 'phone',
+//   '楼栋': 'buildName',
+//   '单元': 'unit',
+//   '房号': 'roomNo',
+//   '月卡类型': 'typeName',
+//   '车牌号码（可以多个车牌号码）': 'carnos',
+//   '车位编号（可以多个车位号）': 'placeCodes',
+// }
 // 字段对应表
 export const columns = {
-  '车主姓名（只能1个）': 'name',
-  '联系电话（1个）': 'phone',
-  '楼栋': 'buildName',
-  '单元': 'unit',
-  '房号': 'roomNo',
-  '月卡类型': 'typeName',
-  '车牌号码（可以多个车牌号码）': 'carnos',
-  '车位编号（可以多个车位号）': 'placeCodes',
+  '4': 'name',
+  '9': 'phone',
+  '1': 'buildName',
+  '2': 'unit',
+  '3': 'roomNo',
+  '11': 'typeName',
+  '15': 'carnos',
+  '14': 'placeCodes',
 }

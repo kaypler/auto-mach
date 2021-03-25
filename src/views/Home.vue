@@ -600,7 +600,13 @@ export default {
         readFile(file).then((data) => {
           const workbook = xlsx.read(data, { type: 'binary' });
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = xlsx.utils.sheet_to_json(worksheet);
+          const jsonData = xlsx.utils.sheet_to_json(worksheet, {header: 1});
+          // 去掉第一行备注
+          if (jsonData[0].length == 1) {
+            jsonData.splice(0, 1);
+          }
+
+          const headers = jsonData.splice(0, 1)[0];
           const keys = Object.keys(columns);
           const sourceMap = jsonData.reduce((map, item) => {
             const newOne = keys.reduce((obj, key) => Object.assign(obj, { [columns[key]]: item[key] }), Object.create(null));
