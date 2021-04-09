@@ -234,6 +234,7 @@ const compareBuildName = (main = '', source = '') => {
   if (Number.isInteger(+source)) {
     source += '栋'
   }
+  source = (source+'').trim();
   if (main.indexOf(source) == -1) {
     console.log(main, source);
   }
@@ -252,6 +253,7 @@ const compareUnit = (main = '/', source = '/') => {
     source += '单元';
   }
   
+  source = (source+'').trim();
   if (main !== source) {
     console.log(main, source);
   }
